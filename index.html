@@ -2,34 +2,15 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hardy Store</title>
 
 <style>
 body {
   margin:0;
-  font-family:"Segoe UI";
-  background:#0a0a1f;
+  font-family:Segoe UI;
+  background: radial-gradient(circle at top, #0a1a40, #050517);
   color:white;
-  overflow-x:hidden;
-}
-
-/* LOADING */
-#loading {
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:#0a0a1f;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:999;
-  font-size:25px;
-  animation:pulse 1s infinite;
-}
-@keyframes pulse {
-  0%{opacity:0.5}
-  50%{opacity:1}
-  100%{opacity:0.5}
 }
 
 /* NAV */
@@ -39,24 +20,34 @@ nav {
   padding:15px;
   background:rgba(0,0,0,0.5);
   backdrop-filter:blur(10px);
-  position:sticky;
-  top:0;
 }
 
+.btns {
+  display:flex;
+  gap:10px;
+  cursor:pointer;
+}
+
+/* LOGO */
 .logo {
   width:100%;
   max-height:200px;
   object-fit:cover;
 }
 
-/* TÍTULOS */
-.titulo {
+/* CATEGORIA */
+.categoria {
   margin:20px;
-  font-size:22px;
-  color:#ff66cc;
 }
 
-/* LINHA */
+.titulo {
+  font-size:22px;
+  background: linear-gradient(45deg,#ff0080,#8a2be2,#ff8c00);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+/* SCROLL */
 .linha {
   display:flex;
   overflow-x:auto;
@@ -64,7 +55,7 @@ nav {
   padding:10px;
 }
 
-/* PRODUTOS */
+/* PRODUTO */
 .produto {
   min-width:170px;
   background:rgba(255,255,255,0.08);
@@ -75,97 +66,77 @@ nav {
 }
 
 .produto:hover {
-  transform:translateY(-5px) scale(1.05);
-  box-shadow:0 0 25px #ff0080;
+  transform:scale(1.05);
+  box-shadow:0 0 20px #ff00aa;
 }
 
-/* BOTÃO */
 button {
-  background:linear-gradient(45deg,#ff0080,#ffcc00);
+  background:linear-gradient(45deg,#ff0080,#ff8c00);
   border:none;
   padding:8px;
   border-radius:8px;
   color:white;
-  cursor:pointer;
 }
 
-/* CARRINHO */
-.carrinho {
+/* SIDE PANELS */
+.painel {
   position:fixed;
-  right:-350px;
   top:0;
-  width:300px;
+  width:280px;
   height:100%;
   background:#111;
   padding:15px;
-  transition:0.4s;
+  transition:0.3s;
+  overflow-y:auto;
 }
 
-.carrinho.ativo {
-  right:0;
-}
+#carrinho { right:-300px; }
+#termos { left:-300px; }
 
-/* RODAPÉ */
-footer {
-  text-align:center;
-  padding:20px;
-  opacity:0.5;
+.ativo { right:0 !important; left:0 !important; }
+
+/* RESPONSIVO */
+@media (max-width:600px){
+  .produto { min-width:140px; }
 }
 </style>
 </head>
 
 <body>
 
-<div id="loading">Carregando loja...</div>
-
 <nav>
-<h2>Hardy Store</h2>
-<div onclick="toggleCarrinho()">🛒</div>
+<h2>Hardy Store 🚀</h2>
+<div class="btns">
+<span onclick="toggle('termos')">📜</span>
+<span onclick="toggle('carrinho')">🛒</span>
+</div>
 </nav>
 
 <img src="https://cdn.discordapp.com/attachments/1487649742501707820/1497682491639726371/file_00000000f050720e96601de1627a78c9.png" class="logo">
 
-<!-- INCOMUNS -->
-<div class="titulo">✨ Incomuns</div>
-<div class="linha">
-<div class="produto"><p>Blossom</p><p>R$0.50</p><button onclick="add('Blossom',0.5)">+</button></div>
-<div class="produto"><p>Floatie</p><p>R$0.80</p><button onclick="add('Floatie',0.8)">+</button></div>
-<div class="produto"><p>Lucky</p><p>R$0.65</p><button onclick="add('Lucky',0.65)">+</button></div>
-</div>
-
-<!-- SETS -->
-<div class="titulo">🔥 Sets</div>
-<div class="linha">
-<div class="produto"><p>Set Fire</p><p>R$3.10</p><button onclick="add('Set Fire',3.1)">+</button></div>
-<div class="produto"><p>Set Portal</p><p>R$1.30</p><button onclick="add('Set Portal',1.3)">+</button></div>
-</div>
-
-<!-- CHROMAS -->
-<div class="titulo">💎 Chromas</div>
-<div class="linha">
-<div class="produto"><p>Lightbringer C</p><p>R$6.50</p><button onclick="add('Lightbringer C',6.5)">+</button></div>
-</div>
+<div id="produtos"></div>
 
 <!-- CARRINHO -->
-<div class="carrinho" id="carrinho">
+<div class="painel" id="carrinho">
 <h3>🛒 Carrinho</h3>
 <ul id="lista"></ul>
 <p>Total: R$ <span id="total">0</span></p>
-<button onclick="finalizar()">Enviar Pedido</button>
+<button onclick="finalizar()">Enviar pedido</button>
 </div>
 
-<footer>
-© Hardy Store — 2026
-</footer>
+<!-- TERMOS -->
+<div class="painel" id="termos">
+<h3>📜 Termos</h3>
+<p>• Pagamento via Pix</p>
+<p>• Entrega rápida</p>
+<p>• Não aceitamos devolução</p>
+<p>• Garantia apenas no momento da entrega</p>
+</div>
 
 <script>
-let carrinho=[];
-let total=0;
+const numero="555192175255";
 
-/* loading */
-window.onload=()=>{
-  document.getElementById("loading").style.display="none";
-}
+let carrinho=[], total=0;
 
 function add(nome,preco){
   carrinho.push({nome,preco});
@@ -178,7 +149,7 @@ function atualizar(){
   lista.innerHTML="";
   carrinho.forEach((i,index)=>{
     let li=document.createElement("li");
-    li.innerHTML=i.nome+" - "+i.preco+
+    li.innerHTML=i.nome+" - R$"+i.preco+
     " <button onclick='remover("+index+")'>X</button>";
     lista.appendChild(li);
   });
@@ -191,17 +162,68 @@ function remover(i){
   atualizar();
 }
 
-function toggleCarrinho(){
-  document.getElementById("carrinho").classList.toggle("ativo");
-}
-
 function finalizar(){
   let msg="Pedido:%0A";
   carrinho.forEach(i=>{
     msg+=i.nome+" - R$ "+i.preco+"%0A";
   });
   msg+="Total: R$ "+total.toFixed(2);
-  window.open("https://wa.me/555192175255?text="+msg);
+  window.open("https://wa.me/"+numero+"?text="+msg);
+}
+
+function toggle(id){
+  document.getElementById(id).classList.toggle("ativo");
+}
+
+/* ESTOQUE COMPLETO */
+const estoque = {
+"Incomuns":[
+["Blossom",0.50],["Floatie",0.80],["Jelly fish",0.50],["Meadow",0.80],
+["Painted",0.80],["Paws",0.50],["Popsicle arma",0.50],["Soda",0.50],
+["Starry",0.50],["Turtle",0.50],["Bluesteel arma",0.65],["Future",0.65],
+["Hive",0.65],["Lucky",0.65],["Red",0.65],["Blue",0.65],
+["Gingerbread",1.60],["Gingerheart",0.50],["Holly arma",0.70],
+["Nutcracker",1.00],["Ornaments",0.50],["Sweater",0.80],
+["Ghostly faca",0.50],["Mummy arma",0.80],["Pumpkin",0.50],
+["Treats",0.50],["Webs",0.80]
+],
+
+"Sets":[
+["Set Fire",3.10],["Set Portal",1.30],["Set Toxic",3.60],
+["Set Hazard",1.60],["Set Watcher",0.60]
+],
+
+"Low Sets":[
+["Eternal set",5.80],["Hallow set",4.70],["Battleaxe set",4.20],
+["Iceflake set",4.00],["Plasma set",4.00]
+],
+
+"Chromas":[
+["Lightbringer C",6.50],["Darkbringer C",6.50],["Luger C",6.50],
+["Gemstone C",4.50],["Seer C",4.50]
+]
+};
+
+const container=document.getElementById("produtos");
+
+for(let cat in estoque){
+  let sec=document.createElement("div");
+  sec.className="categoria";
+  sec.innerHTML="<div class='titulo'>"+cat+"</div>";
+  
+  let linha=document.createElement("div");
+  linha.className="linha";
+
+  estoque[cat].forEach(item=>{
+    let div=document.createElement("div");
+    div.className="produto";
+    div.innerHTML=`<p>${item[0]}</p><p>R$ ${item[1]}</p>
+    <button onclick="add('${item[0]}',${item[1]})">+</button>`;
+    linha.appendChild(div);
+  });
+
+  sec.appendChild(linha);
+  container.appendChild(sec);
 }
 </script>
 

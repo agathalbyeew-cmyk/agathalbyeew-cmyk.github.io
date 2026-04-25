@@ -7,110 +7,108 @@
 <style>
 body {
   margin: 0;
-  font-family: "Segoe UI", Arial;
-  background: linear-gradient(135deg, #1a0033, #0a0a1f);
+  font-family: "Segoe UI";
+  background: linear-gradient(135deg,#1a0033,#0a0a1f);
   color: white;
 }
 
-/* NAVBAR */
+/* NAV */
 nav {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-  background: rgba(0,0,0,0.4);
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+  background:rgba(0,0,0,0.4);
   backdrop-filter: blur(10px);
 }
 
-nav h2 {
-  color: #ff4da6;
-}
-
-/* BOTÃO CARRINHO */
-.cart-btn {
-  cursor: pointer;
-}
-
-/* LOGO */
 .logo {
-  width: 100%;
-  max-height: 220px;
-  object-fit: cover;
+  width:100%;
+  max-height:200px;
+  object-fit:cover;
 }
 
 /* CATEGORIAS */
-.categorias {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 20px;
+.categoria {
+  margin:20px;
 }
 
-.cat {
-  padding: 10px 15px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.1);
-  cursor: pointer;
-  transition: 0.2s;
+.titulo {
+  font-size:22px;
+  color:#ff66cc;
 }
 
-.cat:hover {
-  background: #ff0080;
+/* SCROLL LATERAL */
+.linha {
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  padding:10px;
 }
 
-/* PRODUTOS */
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+.linha::-webkit-scrollbar {
+  height:6px;
+}
+.linha::-webkit-scrollbar-thumb {
+  background:#ff0080;
+  border-radius:10px;
 }
 
+/* PRODUTO */
 .produto {
-  background: rgba(255,255,255,0.08);
+  min-width:180px;
+  background:rgba(255,255,255,0.08);
   backdrop-filter: blur(10px);
-  margin: 10px;
-  padding: 15px;
-  border-radius: 15px;
-  width: 180px;
-  transition: 0.3s;
+  padding:15px;
+  border-radius:15px;
+  transition:0.3s;
 }
 
 .produto:hover {
-  transform: translateY(-5px) scale(1.05);
+  transform:scale(1.05);
+  box-shadow:0 0 20px #ff0080;
 }
 
 button {
-  background: linear-gradient(45deg, #ff0080, #ffcc00);
-  border: none;
-  padding: 8px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
+  margin-top:5px;
+  background:linear-gradient(45deg,#ff0080,#ffcc00);
+  border:none;
+  padding:8px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
 }
 
 /* CARRINHO */
 .carrinho {
-  position: fixed;
-  right: -300px;
-  top: 0;
-  width: 280px;
-  height: 100%;
-  background: #111;
-  padding: 15px;
-  transition: 0.3s;
+  position:fixed;
+  right:-350px;
+  top:0;
+  width:300px;
+  height:100%;
+  background:#111;
+  padding:15px;
+  transition:0.3s;
 }
 
 .carrinho.ativo {
-  right: 0;
+  right:0;
+}
+
+input {
+  width:100%;
+  padding:5px;
+  margin-bottom:10px;
 }
 
 /* ANIMAÇÃO */
-@keyframes fade {
-  from {opacity: 0;}
-  to {opacity: 1;}
+@keyframes glow {
+  0% {box-shadow:0 0 5px #ff0080;}
+  50% {box-shadow:0 0 20px #ff0080;}
+  100% {box-shadow:0 0 5px #ff0080;}
 }
 
 .produto {
-  animation: fade 0.5s ease;
+  animation: glow 3s infinite;
 }
 </style>
 </head>
@@ -119,75 +117,86 @@ button {
 
 <nav>
 <h2>Hardy Store</h2>
-<div class="cart-btn" onclick="toggleCarrinho()">🛒</div>
+<div onclick="toggleCarrinho()">🛒</div>
 </nav>
 
 <img src="https://cdn.discordapp.com/attachments/1487649742501707820/1497682491639726371/file_00000000f050720e96601de1627a78c9.png" class="logo">
 
-<!-- CATEGORIAS -->
-<div class="categorias">
-<div class="cat" onclick="filtro('todos')">Todos</div>
-<div class="cat" onclick="filtro('incomum')">Incomuns</div>
-<div class="cat" onclick="filtro('set')">Sets</div>
-<div class="cat" onclick="filtro('chroma')">Chromas</div>
+<!-- INCOMUNS -->
+<div class="categoria">
+<div class="titulo">✨ Incomuns</div>
+<div class="linha">
+
+<div class="produto"><p>Blossom</p><p>R$0.50</p><button onclick="add('Blossom',0.5)">+</button></div>
+<div class="produto"><p>Floatie</p><p>R$0.80</p><button onclick="add('Floatie',0.8)">+</button></div>
+<div class="produto"><p>Jellyfish</p><p>R$0.50</p><button onclick="add('Jellyfish',0.5)">+</button></div>
+<div class="produto"><p>Lucky</p><p>R$0.65</p><button onclick="add('Lucky',0.65)">+</button></div>
+
+</div>
 </div>
 
-<!-- PRODUTOS -->
-<div class="container" id="produtos">
+<!-- SETS -->
+<div class="categoria">
+<div class="titulo">🔥 Sets</div>
+<div class="linha">
 
-<div class="produto incomum">
-<p>Blossom</p>
-<p>R$ 0,50</p>
-<button onclick="add('Blossom',0.5)">+</button>
+<div class="produto"><p>Set Fire</p><p>R$3.10</p><button onclick="add('Set Fire',3.1)">+</button></div>
+<div class="produto"><p>Set Portal</p><p>R$1.30</p><button onclick="add('Set Portal',1.3)">+</button></div>
+<div class="produto"><p>Set Toxic</p><p>R$3.60</p><button onclick="add('Set Toxic',3.6)">+</button></div>
+
+</div>
 </div>
 
-<div class="produto incomum">
-<p>Floatie</p>
-<p>R$ 0,80</p>
-<button onclick="add('Floatie',0.8)">+</button>
-</div>
+<!-- CHROMAS -->
+<div class="categoria">
+<div class="titulo">💎 Chromas</div>
+<div class="linha">
 
-<div class="produto set">
-<p>Set Fire</p>
-<p>R$ 3,10</p>
-<button onclick="add('Set Fire',3.1)">+</button>
-</div>
+<div class="produto"><p>Lightbringer C</p><p>R$6.50</p><button onclick="add('Lightbringer C',6.5)">+</button></div>
+<div class="produto"><p>Darkbringer C</p><p>R$6.50</p><button onclick="add('Darkbringer C',6.5)">+</button></div>
 
-<div class="produto chroma">
-<p>Lightbringer C</p>
-<p>R$ 6,50</p>
-<button onclick="add('Lightbringer C',6.5)">+</button>
 </div>
-
 </div>
 
 <!-- CARRINHO -->
 <div class="carrinho" id="carrinho">
 <h3>🛒 Carrinho</h3>
+
+<input type="text" placeholder="Pesquisar item..." oninput="buscar(this.value)">
+
 <ul id="lista"></ul>
+
 <p>Total: R$ <span id="total">0</span></p>
-<button onclick="finalizar()">Finalizar</button>
+
+<button onclick="finalizar()">Enviar pedido</button>
 </div>
 
 <script>
-let carrinho = [];
-let total = 0;
+let carrinho=[];
+let total=0;
 
-function add(nome, preco){
+function add(nome,preco){
   carrinho.push({nome,preco});
-  total += preco;
+  total+=preco;
   atualizar();
 }
 
 function atualizar(){
-  let lista = document.getElementById("lista");
-  lista.innerHTML = "";
-  carrinho.forEach(i=>{
-    let li = document.createElement("li");
-    li.textContent = i.nome + " - " + i.preco;
+  let lista=document.getElementById("lista");
+  lista.innerHTML="";
+  carrinho.forEach((i,index)=>{
+    let li=document.createElement("li");
+    li.innerHTML=i.nome+" - "+i.preco+
+    " <button onclick='remover("+index+")'>X</button>";
     lista.appendChild(li);
   });
-  document.getElementById("total").textContent = total.toFixed(2);
+  document.getElementById("total").textContent=total.toFixed(2);
+}
+
+function remover(i){
+  total-=carrinho[i].preco;
+  carrinho.splice(i,1);
+  atualizar();
 }
 
 function toggleCarrinho(){
@@ -203,9 +212,9 @@ function finalizar(){
   window.open("https://wa.me/555192175255?text="+msg);
 }
 
-function filtro(cat){
-  document.querySelectorAll(".produto").forEach(p=>{
-    p.style.display = (cat=="todos"||p.classList.contains(cat))?"block":"none";
+function buscar(texto){
+  document.querySelectorAll("#lista li").forEach(li=>{
+    li.style.display=li.textContent.toLowerCase().includes(texto.toLowerCase())?"block":"none";
   });
 }
 </script>

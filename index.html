@@ -1,231 +1,246 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE html><html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hardy Store</title>
-
-<style>
-body {
-  margin:0;
-  font-family:Segoe UI;
-  background: radial-gradient(circle at top, #0a1a40, #050517);
-  color:white;
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"><style>
+:root{
+ --grad: linear-gradient(135deg,#ff4ecd,#7a5cff,#00c2ff,#ff9a3c);
 }
 
-/* NAV */
-nav {
-  display:flex;
-  justify-content:space-between;
-  padding:15px;
-  background:rgba(0,0,0,0.5);
-  backdrop-filter:blur(10px);
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:'Poppins',sans-serif;
+ background:#0f0f1a;
+ color:white;
 }
 
-.btns {
-  display:flex;
-  gap:10px;
-  cursor:pointer;
+header{
+ padding:40px 20px;
+ text-align:center;
+ background:var(--grad);
 }
 
-/* LOGO */
-.logo {
-  width:100%;
-  max-height:200px;
-  object-fit:cover;
+h1{font-size:2.8em;margin:0}
+
+.hero{
+ text-align:center;
+ padding:40px 20px;
 }
 
-/* CATEGORIA */
-.categoria {
-  margin:20px;
+.hero button{
+ padding:15px 30px;
+ border:none;
+ border-radius:30px;
+ background:var(--grad);
+ color:white;
+ font-weight:600;
+ cursor:pointer;
+ transition:0.3s;
+}
+.hero button:hover{box-shadow:0 0 20px #fff}
+
+.container{padding:20px}
+
+.filters{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ justify-content:center;
+ margin-bottom:20px;
 }
 
-.titulo {
-  font-size:22px;
-  background: linear-gradient(45deg,#ff0080,#8a2be2,#ff8c00);
-  -webkit-background-clip:text;
-  color:transparent;
+.filters button{
+ border:none;
+ padding:10px 15px;
+ border-radius:20px;
+ background:#1c1c2e;
+ color:white;
+ cursor:pointer;
 }
 
-/* SCROLL */
-.linha {
-  display:flex;
-  overflow-x:auto;
-  gap:10px;
-  padding:10px;
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:20px;
 }
 
-/* PRODUTO */
-.produto {
-  min-width:170px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(10px);
-  padding:15px;
-  border-radius:15px;
-  transition:0.3s;
+.card{
+ background:rgba(255,255,255,0.05);
+ backdrop-filter:blur(12px);
+ padding:15px;
+ border-radius:15px;
+ transition:0.3s;
+}
+.card:hover{
+ transform:translateY(-5px);
+ box-shadow:0 0 20px rgba(255,255,255,0.2);
 }
 
-.produto:hover {
-  transform:scale(1.05);
-  box-shadow:0 0 20px #ff00aa;
+button.add{
+ width:100%;
+ margin-top:10px;
+ padding:10px;
+ border:none;
+ border-radius:20px;
+ background:var(--grad);
+ color:white;
+ cursor:pointer;
 }
 
-button {
-  background:linear-gradient(45deg,#ff0080,#ff8c00);
-  border:none;
-  padding:8px;
-  border-radius:8px;
-  color:white;
+#cart{
+ position:fixed;
+ right:15px;
+ bottom:15px;
+ width:280px;
+ background:#1c1c2e;
+ border-radius:15px;
+ padding:15px;
 }
 
-/* SIDE PANELS */
-.painel {
-  position:fixed;
-  top:0;
-  width:280px;
-  height:100%;
-  background:#111;
-  padding:15px;
-  transition:0.3s;
-  overflow-y:auto;
+#cartItems{max-height:150px;overflow:auto}
+
+input{
+ width:100%;
+ margin-top:5px;
+ padding:8px;
+ border-radius:10px;
+ border:none;
 }
 
-#carrinho { right:-300px; }
-#termos { left:-300px; }
-
-.ativo { right:0 !important; left:0 !important; }
-
-/* RESPONSIVO */
-@media (max-width:600px){
-  .produto { min-width:140px; }
+.search{
+ display:block;
+ margin:0 auto 20px auto;
+ padding:10px;
+ width:250px;
+ border-radius:20px;
+ border:none;
 }
-</style>
-</head>
 
-<body>
+footer{
+ text-align:center;
+ padding:20px;
+ opacity:0.7;
+}
 
-<nav>
-<h2>Hardy Store 🚀</h2>
-<div class="btns">
-<span onclick="toggle('termos')">📜</span>
-<span onclick="toggle('carrinho')">🛒</span>
-</div>
-</nav>
-
-<img src="https://cdn.discordapp.com/attachments/1487649742501707820/1497682491639726371/file_00000000f050720e96601de1627a78c9.png" class="logo">
-
-<div id="produtos"></div>
-
-<!-- CARRINHO -->
-<div class="painel" id="carrinho">
-<h3>🛒 Carrinho</h3>
-<ul id="lista"></ul>
+</style></head>
+<body><header>
+<h1>Hardy Store</h1>
+<p>Os melhores itens de Murder Mystery 2 com os melhores preços!</p>
+</header><section class="hero">
+<p>Entrega rápida ⚡ | Atendimento confiável 💬 | Preços competitivos 💰</p>
+<button onclick="scrollToProducts()">Ver Produtos</button>
+</section><div class="container" id="produtos"><input class="search" placeholder="Buscar item..." onkeyup="searchItem(this.value)"><div class="filters" id="filters"></div><div class="grid" id="products"></div>
+</div><div id="cart">
+<h3>Carrinho</h3>
+<ul id="cartItems"></ul>
 <p>Total: R$ <span id="total">0</span></p>
-<button onclick="finalizar()">Enviar pedido</button>
-</div>
+<input id="name" placeholder="Seu nome">
+<input id="whatsapp" placeholder="WhatsApp">
+<button class="add" onclick="checkout()">Finalizar</button>
+</div><footer>
+<p>Na Hardy Store, sua compra é segura do início ao fim.</p>
+</footer><script>
 
-<!-- TERMOS -->
-<div class="painel" id="termos">
-<h3>📜 Termos</h3>
-<p>• Pagamento via Pix</p>
-<p>• Entrega rápida</p>
-<p>• Não aceitamos devolução</p>
-<p>• Garantia apenas no momento da entrega</p>
-</div>
+const categories = ["Todos","Comum","Raro","Godly","Ancient"];
 
-<script>
-const numero="555192175255";
+const products = [
+{name:'Icewing',price:25,stock:5,cat:'Ancient'},
+{name:'Chroma Fang',price:40,stock:3,cat:'Godly'},
+{name:'Seer',price:10,stock:10,cat:'Comum'},
+{name:'Laser',price:20,stock:7,cat:'Raro'}
+];
 
-let carrinho=[], total=0;
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let currentFilter = 'Todos';
 
-function add(nome,preco){
-  carrinho.push({nome,preco});
-  total+=preco;
-  atualizar();
+function renderFilters(){
+ const f = document.getElementById('filters');
+ f.innerHTML='';
+ categories.forEach(c=>{
+  f.innerHTML += `<button onclick="filter('${c}')">${c}</button>`;
+ });
 }
 
-function atualizar(){
-  let lista=document.getElementById("lista");
-  lista.innerHTML="";
-  carrinho.forEach((i,index)=>{
-    let li=document.createElement("li");
-    li.innerHTML=i.nome+" - R$"+i.preco+
-    " <button onclick='remover("+index+")'>X</button>";
-    lista.appendChild(li);
-  });
-  document.getElementById("total").textContent=total.toFixed(2);
+function renderProducts(){
+ const container = document.getElementById('products');
+ container.innerHTML='';
+ products
+ .filter(p=> currentFilter==='Todos'||p.cat===currentFilter)
+ .forEach((p,i)=>{
+ container.innerHTML += `
+ <div class="card">
+ <h3>${p.name}</h3>
+ <p>${p.cat}</p>
+ <p>R$ ${p.price}</p>
+ <p>Estoque: ${p.stock}</p>
+ <button class="add" onclick="addToCart(${i})">Adicionar ao Carrinho</button>
+ </div>`;
+ });
 }
 
-function remover(i){
-  total-=carrinho[i].preco;
-  carrinho.splice(i,1);
-  atualizar();
+function addToCart(i){
+ if(products[i].stock<=0) return alert('Sem estoque');
+ products[i].stock--;
+ cart.push(products[i]);
+ localStorage.setItem('cart',JSON.stringify(cart));
+ updateCart();
 }
 
-function finalizar(){
-  let msg="Pedido:%0A";
-  carrinho.forEach(i=>{
-    msg+=i.nome+" - R$ "+i.preco+"%0A";
-  });
-  msg+="Total: R$ "+total.toFixed(2);
-  window.open("https://wa.me/"+numero+"?text="+msg);
+function updateCart(){
+ const list = document.getElementById('cartItems');
+ list.innerHTML='';
+ let total=0;
+ cart.forEach((item,index)=>{
+ total+=item.price;
+ list.innerHTML += `<li>${item.name} - R$ ${item.price}</li>`;
+ });
+ document.getElementById('total').innerText=total;
 }
 
-function toggle(id){
-  document.getElementById(id).classList.toggle("ativo");
+function checkout(){
+ const name = document.getElementById('name').value;
+ const whatsapp = document.getElementById('whatsapp').value;
+ if(!name||!whatsapp)return alert('Preencha os dados');
+
+ const total = document.getElementById('total').innerText;
+ const msg = `Pedido Hardy Store%0ACliente: ${name}%0ATotal: R$ ${total}`;
+ window.open(`https://wa.me/555192175255?text=${msg}`);
+
+ cart=[];
+ localStorage.removeItem('cart');
+ updateCart();
 }
 
-/* ESTOQUE COMPLETO */
-const estoque = {
-"Incomuns":[
-["Blossom",0.50],["Floatie",0.80],["Jelly fish",0.50],["Meadow",0.80],
-["Painted",0.80],["Paws",0.50],["Popsicle arma",0.50],["Soda",0.50],
-["Starry",0.50],["Turtle",0.50],["Bluesteel arma",0.65],["Future",0.65],
-["Hive",0.65],["Lucky",0.65],["Red",0.65],["Blue",0.65],
-["Gingerbread",1.60],["Gingerheart",0.50],["Holly arma",0.70],
-["Nutcracker",1.00],["Ornaments",0.50],["Sweater",0.80],
-["Ghostly faca",0.50],["Mummy arma",0.80],["Pumpkin",0.50],
-["Treats",0.50],["Webs",0.80]
-],
-
-"Sets":[
-["Set Fire",3.10],["Set Portal",1.30],["Set Toxic",3.60],
-["Set Hazard",1.60],["Set Watcher",0.60]
-],
-
-"Low Sets":[
-["Eternal set",5.80],["Hallow set",4.70],["Battleaxe set",4.20],
-["Iceflake set",4.00],["Plasma set",4.00]
-],
-
-"Chromas":[
-["Lightbringer C",6.50],["Darkbringer C",6.50],["Luger C",6.50],
-["Gemstone C",4.50],["Seer C",4.50]
-]
-};
-
-const container=document.getElementById("produtos");
-
-for(let cat in estoque){
-  let sec=document.createElement("div");
-  sec.className="categoria";
-  sec.innerHTML="<div class='titulo'>"+cat+"</div>";
-  
-  let linha=document.createElement("div");
-  linha.className="linha";
-
-  estoque[cat].forEach(item=>{
-    let div=document.createElement("div");
-    div.className="produto";
-    div.innerHTML=`<p>${item[0]}</p><p>R$ ${item[1]}</p>
-    <button onclick="add('${item[0]}',${item[1]})">+</button>`;
-    linha.appendChild(div);
-  });
-
-  sec.appendChild(linha);
-  container.appendChild(sec);
+function filter(cat){
+ currentFilter=cat;
+ renderProducts();
 }
-</script>
 
-</body>
+function searchItem(q){
+ q=q.toLowerCase();
+ const container=document.getElementById('products');
+ container.innerHTML='';
+ products.filter(p=>p.name.toLowerCase().includes(q)).forEach((p,i)=>{
+ container.innerHTML += `
+ <div class="card">
+ <h3>${p.name}</h3>
+ <p>${p.cat}</p>
+ <p>R$ ${p.price}</p>
+ <p>Estoque: ${p.stock}</p>
+ <button class="add" onclick="addToCart(${i})">Adicionar</button>
+ </div>`;
+ });
+}
+
+function scrollToProducts(){
+ document.getElementById('produtos').scrollIntoView({behavior:'smooth'});
+}
+
+renderFilters();
+renderProducts();
+updateCart();
+
+</script></body>
 </html>

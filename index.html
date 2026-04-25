@@ -3,7 +3,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hardy Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet"><style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"><style>
 :root{
  --grad: linear-gradient(135deg,#ff4ecd,#7a5cff,#00c2ff,#ff9a3c);
 }
@@ -11,71 +11,106 @@
 *{box-sizing:border-box}
 body{
  margin:0;
- font-family:'Poppins',sans-serif;
- background:#0f0f1a;
+ font-family:'Inter',sans-serif;
+ background:#0b0b14;
  color:white;
 }
 
 header{
- padding:40px 20px;
- text-align:center;
- background:var(--grad);
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:20px 30px;
+ background:rgba(255,255,255,0.05);
+ backdrop-filter:blur(10px);
+ position:sticky;
+ top:0;
 }
 
-h1{font-size:2.8em;margin:0}
+.logo{font-weight:700;font-size:1.5em}
+
+nav a{
+ margin-left:20px;
+ text-decoration:none;
+ color:white;
+ opacity:0.8;
+}
 
 .hero{
+ padding:80px 20px;
  text-align:center;
- padding:40px 20px;
+ background:radial-gradient(circle at top, rgba(255,78,205,0.2), transparent);
 }
 
+.hero h1{font-size:3em;margin-bottom:10px}
+.hero p{opacity:0.8}
+
 .hero button{
- padding:15px 30px;
+ margin-top:20px;
+ padding:15px 35px;
  border:none;
  border-radius:30px;
  background:var(--grad);
  color:white;
  font-weight:600;
  cursor:pointer;
- transition:0.3s;
+ box-shadow:0 0 20px rgba(255,255,255,0.2);
 }
-.hero button:hover{box-shadow:0 0 20px #fff}
 
-.container{padding:20px}
+.container{padding:30px}
 
-.filters{
+.topbar{
  display:flex;
- gap:10px;
+ justify-content:space-between;
+ align-items:center;
  flex-wrap:wrap;
- justify-content:center;
  margin-bottom:20px;
 }
 
-.filters button{
- border:none;
- padding:10px 15px;
+.search{
+ padding:10px;
  border-radius:20px;
- background:#1c1c2e;
+ border:none;
+ width:200px;
+}
+
+.filters button{
+ margin:5px;
+ padding:8px 12px;
+ border:none;
+ border-radius:20px;
+ background:#1a1a2e;
  color:white;
  cursor:pointer;
 }
 
 .grid{
  display:grid;
- grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
  gap:20px;
 }
 
 .card{
- background:rgba(255,255,255,0.05);
- backdrop-filter:blur(12px);
- padding:15px;
+ background:rgba(255,255,255,0.04);
  border-radius:15px;
+ padding:15px;
  transition:0.3s;
+ position:relative;
 }
+
 .card:hover{
  transform:translateY(-5px);
- box-shadow:0 0 20px rgba(255,255,255,0.2);
+ box-shadow:0 0 20px rgba(255,255,255,0.15);
+}
+
+.badge{
+ position:absolute;
+ top:10px;
+ right:10px;
+ background:var(--grad);
+ padding:3px 8px;
+ border-radius:10px;
+ font-size:0.7em;
 }
 
 button.add{
@@ -93,13 +128,13 @@ button.add{
  position:fixed;
  right:15px;
  bottom:15px;
- width:280px;
- background:#1c1c2e;
+ width:260px;
+ background:#121226;
  border-radius:15px;
  padding:15px;
 }
 
-#cartItems{max-height:150px;overflow:auto}
+#cartItems{max-height:140px;overflow:auto}
 
 input{
  width:100%;
@@ -109,38 +144,37 @@ input{
  border:none;
 }
 
-.search{
- display:block;
- margin:0 auto 20px auto;
- padding:10px;
- width:250px;
- border-radius:20px;
- border:none;
-}
-
 footer{
  text-align:center;
- padding:20px;
- opacity:0.7;
+ padding:30px;
+ opacity:0.6;
 }
 
 </style></head>
 <body><header>
-<h1>Hardy Store</h1>
-<p>Os melhores itens de Murder Mystery 2 com os melhores preços!</p>
+<div class="logo">Hardy Store</div>
+<nav>
+<a href="#">Início</a>
+<a href="#produtos">Produtos</a>
+<a href="#">Sobre</a>
+</nav>
 </header><section class="hero">
-<p>Entrega rápida ⚡ | Atendimento confiável 💬 | Preços competitivos 💰</p>
-<button onclick="scrollToProducts()">Ver Produtos</button>
-</section><div class="container" id="produtos"><input class="search" placeholder="Buscar item..." onkeyup="searchItem(this.value)"><div class="filters" id="filters"></div><div class="grid" id="products"></div>
+<h1>Itens raros com preços reais</h1>
+<p>Entrega rápida • Loja confiável • Suporte ativo</p>
+<button onclick="scrollToProducts()">Ver Loja</button>
+</section><div class="container" id="produtos"><div class="topbar">
+<input class="search" placeholder="Buscar..." onkeyup="searchItem(this.value)">
+<div class="filters" id="filters"></div>
+</div><div class="grid" id="products"></div>
 </div><div id="cart">
 <h3>Carrinho</h3>
 <ul id="cartItems"></ul>
 <p>Total: R$ <span id="total">0</span></p>
-<input id="name" placeholder="Seu nome">
+<input id="name" placeholder="Nome">
 <input id="whatsapp" placeholder="WhatsApp">
 <button class="add" onclick="checkout()">Finalizar</button>
 </div><footer>
-<p>Na Hardy Store, sua compra é segura do início ao fim.</p>
+<p>Hardy Store © Todos os direitos reservados</p>
 </footer><script>
 
 const categories = ["Todos","Comum","Raro","Godly","Ancient"];
@@ -171,11 +205,11 @@ function renderProducts(){
  .forEach((p,i)=>{
  container.innerHTML += `
  <div class="card">
+ <div class="badge">${p.cat}</div>
  <h3>${p.name}</h3>
- <p>${p.cat}</p>
  <p>R$ ${p.price}</p>
  <p>Estoque: ${p.stock}</p>
- <button class="add" onclick="addToCart(${i})">Adicionar ao Carrinho</button>
+ <button class="add" onclick="addToCart(${i})">Adicionar</button>
  </div>`;
  });
 }
@@ -192,7 +226,7 @@ function updateCart(){
  const list = document.getElementById('cartItems');
  list.innerHTML='';
  let total=0;
- cart.forEach((item,index)=>{
+ cart.forEach(item=>{
  total+=item.price;
  list.innerHTML += `<li>${item.name} - R$ ${item.price}</li>`;
  });
@@ -225,8 +259,8 @@ function searchItem(q){
  products.filter(p=>p.name.toLowerCase().includes(q)).forEach((p,i)=>{
  container.innerHTML += `
  <div class="card">
+ <div class="badge">${p.cat}</div>
  <h3>${p.name}</h3>
- <p>${p.cat}</p>
  <p>R$ ${p.price}</p>
  <p>Estoque: ${p.stock}</p>
  <button class="add" onclick="addToCart(${i})">Adicionar</button>

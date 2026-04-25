@@ -7,28 +7,38 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial;
-  background: linear-gradient(180deg, #2a0a4a, #0f0f2e);
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #3a0a5a, #0a0a1f);
   color: white;
   text-align: center;
 }
 
-.banner {
+/* LOGO */
+.logo {
   width: 100%;
-  max-height: 250px;
+  max-height: 300px;
   object-fit: cover;
+  box-shadow: 0 0 30px rgba(255,0,150,0.5);
 }
 
+/* TÍTULO */
 h1 {
-  color: #ff4da6;
-  text-shadow: 0 0 20px #ff4da6;
+  font-size: 45px;
+  margin: 20px;
+  background: linear-gradient(45deg, #ff0080, #ffcc00);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 20px rgba(255,0,150,0.7);
 }
 
+/* CATEGORIAS */
 h2 {
-  margin-top: 30px;
-  color: #ff99dd;
+  margin-top: 40px;
+  color: #ff66cc;
+  text-shadow: 0 0 10px #ff66cc;
 }
 
+/* PRODUTOS */
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -36,21 +46,38 @@ h2 {
 }
 
 .produto {
-  background: #1a1a2e;
+  background: rgba(20,20,40,0.9);
   margin: 10px;
   padding: 15px;
   border-radius: 15px;
   width: 200px;
-  box-shadow: 0 0 15px rgba(255,0,150,0.5);
+  box-shadow: 0 0 20px rgba(255,0,150,0.4);
+  transition: 0.3s;
 }
 
+.produto:hover {
+  transform: scale(1.07);
+  box-shadow: 0 0 30px rgba(255,0,150,0.8);
+}
+
+.produto p {
+  margin: 5px;
+}
+
+/* BOTÃO */
 button {
   background: linear-gradient(45deg, #ff0080, #ff8c00);
   border: none;
-  padding: 8px;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 10px;
   color: white;
   cursor: pointer;
+  margin-top: 5px;
+  transition: 0.2s;
+}
+
+button:hover {
+  transform: scale(1.1);
 }
 </style>
 
@@ -58,54 +85,98 @@ button {
 
 <body>
 
-<img src="banner.png" class="banner">
+<!-- https://cdn.discordapp.com/attachments/1487649742501707820/1497682491639726371/file_00000000f050720e96601de1627a78c9.png?ex=69ee6903&is=69ed1783&hm=0bbd22bb0d5b4eb408eb55dc45b8207eede945b820fcced5a39c94afe6ecaafb& -->
+<img src="logo.png" class="logo">
 
-<h1>🔥 Hardy Store 🔥</h1>
+<h1>Hardy Store 🔥</h1>
 
 <!-- INCOMUNS -->
-<h2>Incomuns</h2>
+<h2>✨ Incomuns</h2>
 <div class="container">
 
-<div class="produto"><p>2X Blossom</p><p>R$ 0,50</p><a href="https://wa.me/5551992175255?text=Quero Blossom"><button>Comprar</button></a></div>
-<div class="produto"><p>2X Floatie</p><p>R$ 0,80</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Jellyfish</p><p>R$ 0,50</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Meadow</p><p>R$ 0,80</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto">
+<p>Blossom</p>
+<p>R$ 0,50</p>
+<button onclick="comprar('Blossom')">Comprar</button>
+</div>
+
+<div class="produto">
+<p>Floatie</p>
+<p>R$ 0,80</p>
+<button onclick="comprar('Floatie')">Comprar</button>
+</div>
+
+<div class="produto">
+<p>Jellyfish</p>
+<p>R$ 0,50</p>
+<button onclick="comprar('Jellyfish')">Comprar</button>
+</div>
 
 </div>
 
 <!-- SETS -->
-<h2>Sets</h2>
+<h2>🔥 Sets</h2>
 <div class="container">
 
-<div class="produto"><p>Set Fire</p><p>R$ 3,10</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Set Portal</p><p>R$ 1,30</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Set Toxic</p><p>R$ 3,60</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto">
+<p>Set Fire</p>
+<p>R$ 3,10</p>
+<button onclick="comprar('Set Fire')">Comprar</button>
+</div>
+
+<div class="produto">
+<p>Set Toxic</p>
+<p>R$ 3,60</p>
+<button onclick="comprar('Set Toxic')">Comprar</button>
+</div>
 
 </div>
 
 <!-- CHROMAS -->
-<h2>Chromas</h2>
+<h2>💎 Chromas</h2>
 <div class="container">
 
-<div class="produto"><p>Lightbringer C</p><p>R$ 6,50</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Darkbringer C</p><p>R$ 6,50</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Luger C</p><p>R$ 6,50</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto">
+<p>Lightbringer C</p>
+<p>R$ 6,50</p>
+<button onclick="comprar('Lightbringer C')">Comprar</button>
+</div>
+
+<div class="produto">
+<p>Darkbringer C</p>
+<p>R$ 6,50</p>
+<button onclick="comprar('Darkbringer C')">Comprar</button>
+</div>
 
 </div>
 
 <!-- LOW SETS -->
-<h2>Low Sets</h2>
+<h2>⚔️ Low Sets</h2>
 <div class="container">
 
-<div class="produto"><p>Eternal Set</p><p>R$ 5,80</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Hallow Set</p><p>R$ 4,70</p><a href="#"><button>Comprar</button></a></div>
-<div class="produto"><p>Battleaxe Set</p><p>R$ 4,20</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto">
+<p>Eternal Set</p>
+<p>R$ 5,80</p>
+<button onclick="comprar('Eternal Set')">Comprar</button>
+</div>
+
+<div class="produto">
+<p>Battleaxe Set</p>
+<p>R$ 4,20</p>
+<button onclick="comprar('Battleaxe Set')">Comprar</button>
+</div>
 
 </div>
+
+<!-- SCRIPT (não mexe aqui muito 👀) -->
+<script>
+function comprar(item) {
+  let numero = "555192175255";
+  let mensagem = "Quero comprar: " + item;
+  let url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem);
+  window.open(url, "_blank");
+}
+</script>
 
 </body>
-</html><div class="produto">
-<p>NOME</p>
-<p>R$ PREÇO</p>
-<a href="#"><button>Comprar</button></a>
-</div>
+</html>

@@ -7,30 +7,54 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial;
-  background: radial-gradient(circle at top, #3a0a5a, #0a0a1f);
+  font-family: "Segoe UI", Arial;
+  background: linear-gradient(135deg, #1a0033, #0a0a1f);
   color: white;
+}
+
+/* NAVBAR */
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+}
+
+nav h2 {
+  color: #ff4da6;
+}
+
+/* BOTÃO CARRINHO */
+.cart-btn {
+  cursor: pointer;
 }
 
 /* LOGO */
 .logo {
   width: 100%;
-  max-height: 250px;
+  max-height: 220px;
   object-fit: cover;
-  box-shadow: 0 0 30px rgba(255,0,150,0.5);
 }
 
-/* HEADER */
-header {
-  text-align: center;
+/* CATEGORIAS */
+.categorias {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
 }
 
-/* TÍTULO */
-h1 {
-  font-size: 40px;
-  background: linear-gradient(45deg, #ff0080, #ffcc00);
-  -webkit-background-clip: text;
-  color: transparent;
+.cat {
+  padding: 10px 15px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cat:hover {
+  background: #ff0080;
 }
 
 /* PRODUTOS */
@@ -41,25 +65,24 @@ h1 {
 }
 
 .produto {
-  background: rgba(20,20,40,0.9);
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
   margin: 10px;
   padding: 15px;
   border-radius: 15px;
-  width: 200px;
-  box-shadow: 0 0 15px rgba(255,0,150,0.4);
+  width: 180px;
   transition: 0.3s;
 }
 
 .produto:hover {
-  transform: scale(1.07);
+  transform: translateY(-5px) scale(1.05);
 }
 
-/* BOTÃO */
 button {
-  background: linear-gradient(45deg, #ff0080, #ff8c00);
+  background: linear-gradient(45deg, #ff0080, #ffcc00);
   border: none;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 8px;
+  border-radius: 8px;
   color: white;
   cursor: pointer;
 }
@@ -67,107 +90,123 @@ button {
 /* CARRINHO */
 .carrinho {
   position: fixed;
-  right: 10px;
-  top: 10px;
+  right: -300px;
+  top: 0;
+  width: 280px;
+  height: 100%;
   background: #111;
   padding: 15px;
-  border-radius: 15px;
-  width: 250px;
-  box-shadow: 0 0 20px #ff0080;
+  transition: 0.3s;
 }
 
-.total {
-  margin-top: 10px;
-  font-weight: bold;
+.carrinho.ativo {
+  right: 0;
 }
 
-.checkout {
-  margin-top: 10px;
-  width: 100%;
+/* ANIMAÇÃO */
+@keyframes fade {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+.produto {
+  animation: fade 0.5s ease;
 }
 </style>
-
 </head>
 
 <body>
 
-<header>
+<nav>
+<h2>Hardy Store</h2>
+<div class="cart-btn" onclick="toggleCarrinho()">🛒</div>
+</nav>
+
 <img src="https://cdn.discordapp.com/attachments/1487649742501707820/1497682491639726371/file_00000000f050720e96601de1627a78c9.png" class="logo">
-<h1>Hardy Store 🔥</h1>
-</header>
+
+<!-- CATEGORIAS -->
+<div class="categorias">
+<div class="cat" onclick="filtro('todos')">Todos</div>
+<div class="cat" onclick="filtro('incomum')">Incomuns</div>
+<div class="cat" onclick="filtro('set')">Sets</div>
+<div class="cat" onclick="filtro('chroma')">Chromas</div>
+</div>
 
 <!-- PRODUTOS -->
-<div class="container">
+<div class="container" id="produtos">
 
-<div class="produto">
+<div class="produto incomum">
 <p>Blossom</p>
 <p>R$ 0,50</p>
-<button onclick="addCarrinho('Blossom', 0.50)">Adicionar</button>
+<button onclick="add('Blossom',0.5)">+</button>
 </div>
 
-<div class="produto">
+<div class="produto incomum">
 <p>Floatie</p>
 <p>R$ 0,80</p>
-<button onclick="addCarrinho('Floatie', 0.80)">Adicionar</button>
+<button onclick="add('Floatie',0.8)">+</button>
 </div>
 
-<div class="produto">
+<div class="produto set">
 <p>Set Fire</p>
 <p>R$ 3,10</p>
-<button onclick="addCarrinho('Set Fire', 3.10)">Adicionar</button>
+<button onclick="add('Set Fire',3.1)">+</button>
 </div>
 
-<div class="produto">
+<div class="produto chroma">
 <p>Lightbringer C</p>
 <p>R$ 6,50</p>
-<button onclick="addCarrinho('Lightbringer C', 6.50)">Adicionar</button>
+<button onclick="add('Lightbringer C',6.5)">+</button>
 </div>
 
 </div>
 
 <!-- CARRINHO -->
-<div class="carrinho">
+<div class="carrinho" id="carrinho">
 <h3>🛒 Carrinho</h3>
 <ul id="lista"></ul>
-<div class="total">Total: R$ <span id="total">0.00</span></div>
-
-<button class="checkout" onclick="finalizar()">Finalizar no WhatsApp</button>
+<p>Total: R$ <span id="total">0</span></p>
+<button onclick="finalizar()">Finalizar</button>
 </div>
 
 <script>
 let carrinho = [];
 let total = 0;
 
-function addCarrinho(nome, preco) {
-  carrinho.push({nome, preco});
+function add(nome, preco){
+  carrinho.push({nome,preco});
   total += preco;
   atualizar();
 }
 
-function atualizar() {
+function atualizar(){
   let lista = document.getElementById("lista");
   lista.innerHTML = "";
-
-  carrinho.forEach(item => {
+  carrinho.forEach(i=>{
     let li = document.createElement("li");
-    li.textContent = item.nome + " - R$ " + item.preco.toFixed(2);
+    li.textContent = i.nome + " - " + i.preco;
     lista.appendChild(li);
   });
-
   document.getElementById("total").textContent = total.toFixed(2);
 }
 
-function finalizar() {
-  let numero = "555192175255";
-  let mensagem = "Pedido:%0A";
+function toggleCarrinho(){
+  document.getElementById("carrinho").classList.toggle("ativo");
+}
 
-  carrinho.forEach(item => {
-    mensagem += item.nome + " - R$ " + item.preco.toFixed(2) + "%0A";
+function finalizar(){
+  let msg="Pedido:%0A";
+  carrinho.forEach(i=>{
+    msg+=i.nome+" - R$ "+i.preco+"%0A";
   });
+  msg+="Total: R$ "+total.toFixed(2);
+  window.open("https://wa.me/555192175255?text="+msg);
+}
 
-  mensagem += "%0ATotal: R$ " + total.toFixed(2);
-
-  window.open("https://wa.me/" + numero + "?text=" + mensagem);
+function filtro(cat){
+  document.querySelectorAll(".produto").forEach(p=>{
+    p.style.display = (cat=="todos"||p.classList.contains(cat))?"block":"none";
+  });
 }
 </script>
 

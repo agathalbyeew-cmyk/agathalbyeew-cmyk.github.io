@@ -3,134 +3,164 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hardy Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"><style>
 :root{
  --pink:#ff4ecd;
+ --purple:#7b5cff;
+ --blue:#3ca6ff;
  --orange:#ff9a3c;
- --blue:#3aa6ff;
- --purple:#7a5cff;
- --grad: linear-gradient(135deg,var(--pink),var(--purple),var(--blue),var(--orange));
-}*{box-sizing:border-box} body{ margin:0; font-family:'Inter',sans-serif; background:linear-gradient(135deg,#1a1f5a,#3a2c8f,#6a2fa8); color:white; }
+ --dark:#0f0f14;
+}
 
-header{ display:flex; justify-content:space-between; align-items:center; padding:20px; }
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{
+ background: linear-gradient(135deg,var(--purple),var(--blue));
+ color:white;
+}
 
-.logo{ font-size:2em; font-weight:700; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+header{
+ padding:20px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ backdrop-filter: blur(10px);
+}
 
-.discord-btn{ background:#5865F2; border:none; padding:10px 15px; border-radius:20px; color:white; cursor:pointer; }
+.logo{
+ font-size:24px;
+ font-weight:700;
+}
 
-#cartBtn{ position:fixed; top:20px; right:20px; background:var(--grad); border:none; border-radius:50px; padding:12px 18px; color:white; font-weight:600; cursor:pointer; }
+button{
+ border:none;
+ padding:10px 18px;
+ border-radius:20px;
+ background: linear-gradient(45deg,var(--pink),var(--orange));
+ color:white;
+ cursor:pointer;
+ transition:0.3s;
+}
+button:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 15px rgba(255,255,255,0.4);
+}
 
-.hero{text-align:center;padding:40px 20px} .hero h1{font-size:2.2em}
+.banner{
+ text-align:center;
+ padding:60px 20px;
+}
 
-.container{padding:20px} .search{width:100%;max-width:300px;margin:0 auto 20px;display:block;padding:12px;border-radius:25px;border:none}
+.banner h1{
+ font-size:32px;
+}
 
-.cat-title{margin:30px 0 10px;font-size:1.4em;color:var(--orange)}
+.container{
+ padding:20px;
+}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+ gap:20px;
+}
 
-.card{ background:rgba(255,255,255,0.08); border-radius:14px; padding:10px; cursor:pointer; text-align:center; transition:0.2s; }
+.card{
+ background:rgba(255,255,255,0.08);
+ border-radius:20px;
+ padding:15px;
+ backdrop-filter:blur(12px);
+ transition:0.3s;
+}
+.card:hover{
+ transform:translateY(-5px);
+}
 
-.card:hover{transform:scale(1.05)}
+.card img{
+ width:100%;
+ border-radius:15px;
+}
 
-.price{font-weight:700;color:#00ffd5}
+.cart{
+ position:fixed;
+ top:20px;
+ right:20px;
+ background:rgba(0,0,0,0.6);
+ padding:15px;
+ border-radius:15px;
+}
 
-#cartModal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; }
-
-.cartBox{ background:#121226; padding:20px; border-radius:15px; width:320px; position:relative; }
-
-.close{ position:absolute; top:10px; right:10px; cursor:pointer; font-size:18px; }
-
-.total{font-weight:700;color:#00ffd5}
-
-.checkout{ margin-top:10px; width:100%; padding:12px; border:none; border-radius:25px; background:#25D366; color:white; font-weight:700; cursor:pointer; }
-
-.badge{ font-size:0.7em; background:var(--grad); padding:3px 6px; border-radius:10px; }
-
-</style>
-</head>
-<body><header>
+footer{
+ text-align:center;
+ padding:20px;
+ margin-top:40px;
+}
+</style></head><body><header>
 <div class="logo">Hardy Store</div>
-<button class="discord-btn" onclick="openDiscord()">Discord</button>
-</header><button id="cartBtn" onclick="toggleCart()">🛒</button>
-
-<section class="hero">
-<h1>Itens estilosos e baratos</h1>
+<button onclick="scrollToProducts()">Ver Produtos</button>
+</header><section class="banner">
+<h1>Os melhores itens de Murder Mystery 2</h1>
+<p>Entrega rápida ⚡ | Preços competitivos 💰</p>
 </section><div class="container" id="produtos">
-<input class="search" placeholder="Buscar item..." onkeyup="searchItem(this.value)">
-<div id="products"></div>
-</div><div id="cartModal">
-<div class="cartBox">
-<div class="close" onclick="toggleCart()">✖</div>
-<h3>🧾 Pedido</h3>
-<ul id="cartItems"></ul>
-<p class="total">Total: R$ <span id="total">0.00</span></p>
-<input id="name" placeholder="Seu nome">
-<button class="checkout" onclick="checkout()">Finalizar</button>
-</div>
-</div><script>
-const data = {
-"Chromas":[['Lightbringer C',6.5],['Darkbringer C',6.5],['Luger C',6.5]],
-"Sets":[['Eternal set',5.8],['Hallow set',4.7]]
-};
+<h2>Produtos</h2>
+<div class="grid" id="productList"></div>
+</div><div class="cart" id="cart">
+<h3>Carrinho</h3>
+<div id="cartItems"></div>
+<p>Total: R$ <span id="total">0</span></p>
+<input placeholder="Seu nome" id="name">
+<input placeholder="WhatsApp" id="whats">
+<button onclick="checkout()">Finalizar</button>
+</div><footer>
+<p>© Hardy Store</p>
+<p>Discord: https://discord.gg/uz5c9QYNzG</p>
+</footer><script>
+let products = [
+ {name:"Icewing",price:10,img:"https://via.placeholder.com/200"},
+ {name:"Darkbringer",price:25,img:"https://via.placeholder.com/200"}
+];
 
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let cart = [];
 
-function render(){
- const container=document.getElementById('products');
- container.innerHTML='';
- Object.keys(data).forEach(cat=>{
- container.innerHTML += `<div class="cat-title">${cat}</div><div class="grid">${data[cat].map(p=>`
- <div class="card" onclick="add('${p[0]}',${p[1]})">
- <div>${p[0]}</div>
- <div class="price">R$ ${p[1].toFixed(2)}</div>
- <div class="badge">${cat}</div>
- </div>`).join('')}</div>`;
+function renderProducts(){
+ let list = document.getElementById('productList');
+ list.innerHTML = '';
+ products.forEach((p,i)=>{
+  list.innerHTML += `
+  <div class="card">
+    <img src="${p.img}">
+    <h3>${p.name}</h3>
+    <p>R$ ${p.price}</p>
+    <button onclick="addToCart(${i})">Adicionar</button>
+  </div>`;
  });
 }
 
-function add(name,price){
- cart.push({name,price});
- localStorage.setItem('cart',JSON.stringify(cart));
+function addToCart(i){
+ cart.push(products[i]);
  updateCart();
 }
 
 function updateCart(){
- let total=0;
- const list=document.getElementById('cartItems');
- list.innerHTML='';
- cart.forEach(i=>{
- total+=i.price;
- list.innerHTML += `<li>${i.name}</li>`;
+ let cartDiv = document.getElementById('cartItems');
+ cartDiv.innerHTML = '';
+ let total = 0;
+ cart.forEach((item,index)=>{
+  total += item.price;
+  cartDiv.innerHTML += `<p>${item.name} - R$${item.price}</p>`;
  });
- document.getElementById('total').innerText=total.toFixed(2);
-}
-
-function toggleCart(){
- const modal=document.getElementById('cartModal');
- modal.style.display = modal.style.display==='flex'?'none':'flex';
+ document.getElementById('total').innerText = total;
 }
 
 function checkout(){
- const name=document.getElementById('name').value;
- const total=document.getElementById('total').innerText;
- const items = cart.map(i=>i.name).join(', ');
- const msg=`Pedido Hardy Store%0ACliente:${name}%0AItens:${items}%0ATotal:R$${total}`;
- window.open(`https://wa.me/555192175255?text=${msg}`);
+ let name = document.getElementById('name').value;
+ let whats = document.getElementById('whats').value;
+ alert(`Pedido feito por ${name} Total R$${document.getElementById('total').innerText}`);
 }
 
-function searchItem(q){
- q=q.toLowerCase();
- document.querySelectorAll('.card').forEach(c=>{
- c.style.display = c.innerText.toLowerCase().includes(q)?'block':'none';
- });
+function scrollToProducts(){
+ document.getElementById('produtos').scrollIntoView({behavior:'smooth'});
 }
 
-function openDiscord(){
- window.open('https://discord.gg/uz5c9QYNzG');
-}
-
-render();
-updateCart();
+renderProducts();
 </script></body>
 </html>

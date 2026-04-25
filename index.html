@@ -7,35 +7,30 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   background: radial-gradient(circle at top, #3a0a5a, #0a0a1f);
   color: white;
-  text-align: center;
 }
 
 /* LOGO */
 .logo {
   width: 100%;
-  max-height: 300px;
+  max-height: 250px;
   object-fit: cover;
   box-shadow: 0 0 30px rgba(255,0,150,0.5);
 }
 
+/* HEADER */
+header {
+  text-align: center;
+}
+
 /* TÍTULO */
 h1 {
-  font-size: 45px;
-  margin: 20px;
+  font-size: 40px;
   background: linear-gradient(45deg, #ff0080, #ffcc00);
   -webkit-background-clip: text;
   color: transparent;
-  text-shadow: 0 0 20px rgba(255,0,150,0.7);
-}
-
-/* CATEGORIAS */
-h2 {
-  margin-top: 40px;
-  color: #ff66cc;
-  text-shadow: 0 0 10px #ff66cc;
 }
 
 /* PRODUTOS */
@@ -51,17 +46,12 @@ h2 {
   padding: 15px;
   border-radius: 15px;
   width: 200px;
-  box-shadow: 0 0 20px rgba(255,0,150,0.4);
+  box-shadow: 0 0 15px rgba(255,0,150,0.4);
   transition: 0.3s;
 }
 
 .produto:hover {
   transform: scale(1.07);
-  box-shadow: 0 0 30px rgba(255,0,150,0.8);
-}
-
-.produto p {
-  margin: 5px;
 }
 
 /* BOTÃO */
@@ -72,12 +62,28 @@ button {
   border-radius: 10px;
   color: white;
   cursor: pointer;
-  margin-top: 5px;
-  transition: 0.2s;
 }
 
-button:hover {
-  transform: scale(1.1);
+/* CARRINHO */
+.carrinho {
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  background: #111;
+  padding: 15px;
+  border-radius: 15px;
+  width: 250px;
+  box-shadow: 0 0 20px #ff0080;
+}
+
+.total {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.checkout {
+  margin-top: 10px;
+  width: 100%;
 }
 </style>
 
@@ -85,96 +91,83 @@ button:hover {
 
 <body>
 
-<!-- https://cdn.discordapp.com/attachments/1487649742501707820/1497682491639726371/file_00000000f050720e96601de1627a78c9.png?ex=69ee6903&is=69ed1783&hm=0bbd22bb0d5b4eb408eb55dc45b8207eede945b820fcced5a39c94afe6ecaafb& -->
-<img src="logo.png" class="logo">
-
+<header>
+<img src="https://cdn.discordapp.com/attachments/1487649742501707820/1497682491639726371/file_00000000f050720e96601de1627a78c9.png" class="logo">
 <h1>Hardy Store 🔥</h1>
+</header>
 
-<!-- INCOMUNS -->
-<h2>✨ Incomuns</h2>
+<!-- PRODUTOS -->
 <div class="container">
 
 <div class="produto">
 <p>Blossom</p>
 <p>R$ 0,50</p>
-<button onclick="comprar('Blossom')">Comprar</button>
+<button onclick="addCarrinho('Blossom', 0.50)">Adicionar</button>
 </div>
 
 <div class="produto">
 <p>Floatie</p>
 <p>R$ 0,80</p>
-<button onclick="comprar('Floatie')">Comprar</button>
+<button onclick="addCarrinho('Floatie', 0.80)">Adicionar</button>
 </div>
-
-<div class="produto">
-<p>Jellyfish</p>
-<p>R$ 0,50</p>
-<button onclick="comprar('Jellyfish')">Comprar</button>
-</div>
-
-</div>
-
-<!-- SETS -->
-<h2>🔥 Sets</h2>
-<div class="container">
 
 <div class="produto">
 <p>Set Fire</p>
 <p>R$ 3,10</p>
-<button onclick="comprar('Set Fire')">Comprar</button>
+<button onclick="addCarrinho('Set Fire', 3.10)">Adicionar</button>
 </div>
-
-<div class="produto">
-<p>Set Toxic</p>
-<p>R$ 3,60</p>
-<button onclick="comprar('Set Toxic')">Comprar</button>
-</div>
-
-</div>
-
-<!-- CHROMAS -->
-<h2>💎 Chromas</h2>
-<div class="container">
 
 <div class="produto">
 <p>Lightbringer C</p>
 <p>R$ 6,50</p>
-<button onclick="comprar('Lightbringer C')">Comprar</button>
-</div>
-
-<div class="produto">
-<p>Darkbringer C</p>
-<p>R$ 6,50</p>
-<button onclick="comprar('Darkbringer C')">Comprar</button>
+<button onclick="addCarrinho('Lightbringer C', 6.50)">Adicionar</button>
 </div>
 
 </div>
 
-<!-- LOW SETS -->
-<h2>⚔️ Low Sets</h2>
-<div class="container">
+<!-- CARRINHO -->
+<div class="carrinho">
+<h3>🛒 Carrinho</h3>
+<ul id="lista"></ul>
+<div class="total">Total: R$ <span id="total">0.00</span></div>
 
-<div class="produto">
-<p>Eternal Set</p>
-<p>R$ 5,80</p>
-<button onclick="comprar('Eternal Set')">Comprar</button>
+<button class="checkout" onclick="finalizar()">Finalizar no WhatsApp</button>
 </div>
 
-<div class="produto">
-<p>Battleaxe Set</p>
-<p>R$ 4,20</p>
-<button onclick="comprar('Battleaxe Set')">Comprar</button>
-</div>
-
-</div>
-
-<!-- SCRIPT (não mexe aqui muito 👀) -->
 <script>
-function comprar(item) {
+let carrinho = [];
+let total = 0;
+
+function addCarrinho(nome, preco) {
+  carrinho.push({nome, preco});
+  total += preco;
+  atualizar();
+}
+
+function atualizar() {
+  let lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  carrinho.forEach(item => {
+    let li = document.createElement("li");
+    li.textContent = item.nome + " - R$ " + item.preco.toFixed(2);
+    lista.appendChild(li);
+  });
+
+  document.getElementById("total").textContent = total.toFixed(2);
+}
+
+function finalizar() {
   let numero = "555192175255";
-  let mensagem = "Quero comprar: " + item;
-  let url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem);
-  window.open(url, "_blank");
+  let mensagem = "Pedido:%0A";
+
+  carrinho.forEach(item => {
+    mensagem += item.nome + " - R$ " + item.preco.toFixed(2) + "%0A";
+  });
+
+  mensagem += "%0ATotal: R$ " + total.toFixed(2);
+
+  window.open("https://wa.me/" + numero + "?text=" + mensagem);
 }
 </script>
 

@@ -5,26 +5,28 @@
 <title>Hardy Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"><style>
 :root{
- --grad: linear-gradient(135deg,#ff4ecd,#7a5cff,#00c2ff,#ff9a3c);
+ --pink:#ff4ecd;
+ --orange:#ff9a3c;
+ --blue:#3aa6ff;
+ --purple:#7a5cff;
+ --grad: linear-gradient(135deg,var(--pink),var(--purple),var(--blue),var(--orange));
 }
 
 *{box-sizing:border-box}
 body{
  margin:0;
  font-family:'Inter',sans-serif;
- background:#0b0b14;
+ background:linear-gradient(135deg,#1a1f5a,#3a2c8f,#6a2fa8);
  color:white;
 }
 
 header{
  text-align:center;
  padding:20px;
- background:rgba(255,255,255,0.05);
- backdrop-filter:blur(12px);
 }
 
 .logo{
- font-size:2.2em;
+ font-size:2.5em;
  font-weight:700;
  background:var(--grad);
  -webkit-background-clip:text;
@@ -33,12 +35,11 @@ header{
 
 .hero{
  text-align:center;
- padding:60px 20px;
+ padding:50px 20px;
 }
 
 .hero h1{
- font-size:2.8em;
- margin-bottom:10px;
+ font-size:2.5em;
 }
 
 .hero button{
@@ -50,11 +51,6 @@ header{
  color:white;
  font-weight:600;
  cursor:pointer;
- transition:0.2s;
-}
-.hero button:hover{
- transform:scale(1.05);
- box-shadow:0 0 15px rgba(255,255,255,0.3);
 }
 
 .container{padding:20px}
@@ -67,95 +63,77 @@ header{
  padding:12px;
  border-radius:25px;
  border:none;
- outline:none;
 }
 
 .cat-title{
  margin:30px 0 10px;
  font-size:1.4em;
- color:#ff9a3c;
+ color:var(--orange);
 }
 
 .grid{
  display:grid;
- grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+ grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
  gap:12px;
 }
 
 .card{
- background:rgba(255,255,255,0.05);
+ background:rgba(255,255,255,0.08);
  border-radius:14px;
  padding:12px;
- display:flex;
- flex-direction:column;
- justify-content:space-between;
  transition:0.2s;
+ cursor:pointer;
 }
 
 .card:hover{
  transform:translateY(-4px);
- box-shadow:0 0 12px rgba(255,255,255,0.15);
+ box-shadow:0 0 12px rgba(255,255,255,0.2);
 }
 
 .price{
  font-weight:700;
- color:#00ffcc;
+ color:#00ffd5;
 }
 
-button.add{
- margin-top:8px;
- padding:10px;
- border:none;
- border-radius:25px;
+#cartBtn{
+ position:fixed;
+ top:20px;
+ right:20px;
  background:var(--grad);
+ border:none;
+ border-radius:50px;
+ padding:12px 18px;
  color:white;
  font-weight:600;
  cursor:pointer;
- transition:0.2s;
+ box-shadow:0 0 15px rgba(0,0,0,0.4);
 }
 
-button.add:hover{
- transform:scale(1.05);
- box-shadow:0 0 12px rgba(255,255,255,0.3);
-}
-
-button.add:active{
- transform:scale(0.95);
-}
-
-#cart{
+#cartModal{
+ display:none;
  position:fixed;
- bottom:10px;
- right:10px;
- width:260px;
+ inset:0;
+ background:rgba(0,0,0,0.6);
+ justify-content:center;
+ align-items:center;
+}
+
+.cartBox{
  background:#121226;
+ padding:20px;
  border-radius:15px;
- padding:15px;
- box-shadow:0 0 20px rgba(0,0,0,0.5);
-}
-
-#cart h3{margin-top:0}
-
-#cartItems{
- max-height:120px;
- overflow:auto;
- margin:10px 0;
-}
-
-#cartItems li{
- font-size:0.9em;
- margin-bottom:4px;
+ width:300px;
 }
 
 .total{
  font-weight:700;
- color:#00ffcc;
+ color:#00ffd5;
 }
 
 input{
  width:100%;
- padding:8px;
- margin-top:5px;
+ padding:10px;
+ margin-top:10px;
  border-radius:10px;
  border:none;
 }
@@ -172,27 +150,25 @@ input{
  cursor:pointer;
 }
 
-.checkout:hover{
- transform:scale(1.05);
-}
-
 </style></head>
 <body><header>
 <div class="logo">Hardy Store</div>
-</header><section class="hero">
-<h1>Itens baratos de verdade</h1>
-<p>Compra rápida • Entrega confiável • Sem enrolação</p>
-<button onclick="scrollToProducts()">Explorar Loja</button>
+</header><button id="cartBtn" onclick="toggleCart()">Carrinho</button>
+
+<section class="hero">
+<h1>Ofertas que valem a pena</h1>
+<button onclick="scrollToProducts()">Ver itens</button>
 </section><div class="container" id="produtos">
 <input class="search" placeholder="Buscar item..." onkeyup="searchItem(this.value)">
 <div id="products"></div>
-</div><div id="cart">
-<h3>Carrinho</h3>
+</div><div id="cartModal">
+<div class="cartBox">
+<h3>Seu carrinho</h3>
 <ul id="cartItems"></ul>
 <p class="total">Total: R$ <span id="total">0.00</span></p>
 <input id="name" placeholder="Seu nome">
-<input id="whatsapp" placeholder="WhatsApp">
-<button class="checkout" onclick="checkout()">Finalizar no WhatsApp</button>
+<button class="checkout" onclick="checkout()">Finalizar</button>
+</div>
 </div><script>
 
 const data = {
@@ -207,13 +183,11 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 function render(){
  const container=document.getElementById('products');
  container.innerHTML='';
-
  Object.keys(data).forEach(cat=>{
  container.innerHTML += `<div class="cat-title">${cat}</div><div class="grid">${data[cat].map(p=>`
- <div class="card">
+ <div class="card" onclick="add('${p[0]}',${p[1]})">
  <div>${p[0]}</div>
  <div class="price">R$ ${p[1].toFixed(2)}</div>
- <button class="add" onclick="add('${p[0]}',${p[1]})">Adicionar</button>
  </div>`).join('')}</div>`;
  });
 }
@@ -235,17 +209,24 @@ function updateCart(){
  document.getElementById('total').innerText=total.toFixed(2);
 }
 
+function toggleCart(){
+ const modal=document.getElementById('cartModal');
+ modal.style.display = modal.style.display==='flex'?'none':'flex';
+ modal.style.display='flex';
+}
+
 function checkout(){
  const name=document.getElementById('name').value;
  const total=document.getElementById('total').innerText;
- const msg=`Pedido Hardy Store%0ACliente:${name}%0ATotal:R$${total}`;
+ const items = cart.map(i=>i.name).join(', ');
+ const msg=`Pedido Hardy Store%0ACliente:${name}%0AItens:${items}%0ATotal:R$${total}`;
  window.open(`https://wa.me/555192175255?text=${msg}`);
 }
 
 function searchItem(q){
  q=q.toLowerCase();
  document.querySelectorAll('.card').forEach(c=>{
- c.style.display = c.innerText.toLowerCase().includes(q)?'flex':'none';
+ c.style.display = c.innerText.toLowerCase().includes(q)?'block':'none';
  });
 }
 

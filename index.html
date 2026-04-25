@@ -1,43 +1,10 @@
-index.html
-style.css
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-  <title>Hardy Store</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8">
+<title>Hardy Store</title>
 
-<body>
-
-  <header>
-    <img src="banner.png" class="banner">
-  </header>
-
-  <h1 class="titulo">Ofertas 🔥</h1>
-
-  <div class="container">
-
-    <div class="produto">
-      <h2>Godly Knife 😈</h2>
-      <p>R$ 25</p>
-      <a href="https://wa.me/555192175255?text=Quero comprar Godly Knife">
-        <button>Comprar</button>
-      </a>
-    </div>
-
-    <div class="produto">
-      <h2>Legend Gun 🔥</h2>
-      <p>R$ 40</p>
-      <a href="https://wa.me/55SEUNUMERO?text=Quero comprar Legend Gun">
-        <button>Comprar</button>
-      </a>
-    </div>
-
-  </div>
-
-</body>
-</html>
-
+<style>
 body {
   margin: 0;
   font-family: Arial;
@@ -46,22 +13,22 @@ body {
   text-align: center;
 }
 
-/* banner */
 .banner {
   width: 100%;
-  max-height: 300px;
+  max-height: 250px;
   object-fit: cover;
 }
 
-/* título */
-.titulo {
-  font-size: 40px;
-  margin: 20px;
+h1 {
   color: #ff4da6;
-  text-shadow: 0 0 15px #ff4da6;
+  text-shadow: 0 0 20px #ff4da6;
 }
 
-/* produtos */
+h2 {
+  margin-top: 30px;
+  color: #ff99dd;
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -70,28 +37,71 @@ body {
 
 .produto {
   background: #1a1a2e;
-  margin: 15px;
-  padding: 20px;
-  border-radius: 20px;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 15px;
   width: 200px;
-
-  box-shadow: 0 0 20px rgba(255, 0, 150, 0.5);
-}
-
-.produto h2 {
-  color: #ff66cc;
+  box-shadow: 0 0 15px rgba(255,0,150,0.5);
 }
 
 button {
   background: linear-gradient(45deg, #ff0080, #ff8c00);
   border: none;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 8px;
+  border-radius: 8px;
   color: white;
   cursor: pointer;
 }
+</style>
 
-button:hover {
-  transform: scale(1.1);
-}
+</head>
 
+<body>
+
+<img src="banner.png" class="banner">
+
+<h1>🔥 Hardy Store 🔥</h1>
+
+<!-- INCOMUNS -->
+<h2>Incomuns</h2>
+<div class="container">
+
+<div class="produto"><p>2X Blossom</p><p>R$ 0,50</p><a href="https://wa.me/55SEUNUMERO?text=Quero Blossom"><button>Comprar</button></a></div>
+<div class="produto"><p>2X Floatie</p><p>R$ 0,80</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Jellyfish</p><p>R$ 0,50</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Meadow</p><p>R$ 0,80</p><a href="#"><button>Comprar</button></a></div>
+
+</div>
+
+<!-- SETS -->
+<h2>Sets</h2>
+<div class="container">
+
+<div class="produto"><p>Set Fire</p><p>R$ 3,10</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Set Portal</p><p>R$ 1,30</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Set Toxic</p><p>R$ 3,60</p><a href="#"><button>Comprar</button></a></div>
+
+</div>
+
+<!-- CHROMAS -->
+<h2>Chromas</h2>
+<div class="container">
+
+<div class="produto"><p>Lightbringer C</p><p>R$ 6,50</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Darkbringer C</p><p>R$ 6,50</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Luger C</p><p>R$ 6,50</p><a href="#"><button>Comprar</button></a></div>
+
+</div>
+
+<!-- LOW SETS -->
+<h2>Low Sets</h2>
+<div class="container">
+
+<div class="produto"><p>Eternal Set</p><p>R$ 5,80</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Hallow Set</p><p>R$ 4,70</p><a href="#"><button>Comprar</button></a></div>
+<div class="produto"><p>Battleaxe Set</p><p>R$ 4,20</p><a href="#"><button>Comprar</button></a></div>
+
+</div>
+
+</body>
+</html>
